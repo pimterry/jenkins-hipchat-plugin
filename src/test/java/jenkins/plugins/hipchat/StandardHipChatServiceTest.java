@@ -10,9 +10,8 @@ public class StandardHipChatServiceTest {
      * Publish should generally not rethrow exceptions, or it will cause a build job to fail at end.
      */
     @Test
-    public void publishWithBadHostShouldNotRethrowExceptions() {
-        StandardHipChatService service = new StandardHipChatService("token", "room", "from");
-        service.setHost("hostvaluethatwillcausepublishtofail");
+    public void publishWithBadUrlShouldNotRethrowExceptions() {
+        StandardHipChatService service = new StandardHipChatService("http://hostvaluethatwillcausepublishtofail", "token", "room", "from");
         service.publish("message");
     }
 }

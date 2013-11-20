@@ -14,13 +14,14 @@ public class StandardHipChatService implements HipChatService {
 
     private static final Logger logger = Logger.getLogger(StandardHipChatService.class.getName());
 
-    private String host = "api.hipchat.com";
+    private String hipChatUrl;
     private String token;
     private String[] roomIds;
     private String from;
 
-    public StandardHipChatService(String token, String roomId, String from) {
+    public StandardHipChatService(String hipChatUrl, String token, String roomId, String from) {
         super();
+        this.hipChatUrl = hipChatUrl;
         this.token = token;
         this.roomIds = roomId.split(",");
         this.from = from;
@@ -32,9 +33,9 @@ public class StandardHipChatService implements HipChatService {
 
     public void publish(String message, String color) {
         for (String roomId : roomIds) {
-            logger.info("Posting: " + from + " to " + roomId + ": " + message + " " + color);
+            logger.info("Posting to " + hipChatUrl + ": " + from + " to " + roomId + ": " + message + " " + color);
             HttpClient client = getHttpClient();
-            String url = "https://" + host + "/v1/rooms/message?auth_token=" + token;
+            String url = hipChatUrl + "?auth_token=" + token;
             PostMethod post = new PostMethod(url);
 
             try {
@@ -70,9 +71,5 @@ public class StandardHipChatService implements HipChatService {
 
     private String shouldNotify(String color) {
         return color.equalsIgnoreCase("green") ? "0" : "1";
-    }
-
-    void setHost(String host) {
-        this.host = host;
     }
 }
